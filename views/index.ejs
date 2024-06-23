@@ -1,0 +1,30 @@
+<h1>Hi <%= name %></h1>
+    <form action="/logout?_method=DELETE" method="POST">
+        <button type="submit">Logout</button>
+    </form>
+
+    <h2>Books</h2>
+    <a href="/books/new">Add New Book</a>
+    <ul>
+        <% books.forEach(book => { %>
+            <li>
+                <strong><%= book.title %></strong> by <%= book.author %> (<%= book.year %>)
+                <% if (book.isborrowed) { %>
+                    <span> - Borrowed by <%= book.borrower.name %></span>
+                    <% if (book.borrower._id.toString() === userId.toString()) { %>
+                        <form action="/books/<%= book._id %>/return" method="POST" style="display:inline;">
+                            <button type="submit">Return</button>
+                        </form>
+                    <% } %>
+                <% } else { %>
+                    <form action="/books/<%= book._id %>/borrow" method="POST" style="display:inline;">
+                        <button type="submit">Borrow</button>
+                    </form>
+                <% } %>
+                <a href="/books/<%= book._id %>/edit">Edit</a>
+                <form action="/books/<%= book._id %>?_method=DELETE" method="POST" style="display:inline;">
+                    <button type="submit">Delete</button>
+                </form>
+            </li>
+        <% }) %>
+    </ul>
